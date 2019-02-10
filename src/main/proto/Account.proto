@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_multiple_files = true; 
+package com.github.eggs.grpc.account;
+
+import "google/protobuf/timestamp.proto";
+
+enum Account_Type { 
+    CASH = 0; 
+    CREDIT = 1; 
+}
+
+message Account { 
+    string id = 1;
+    string customer_id = 2; 
+    Account_Type account_type = 3; 
+    google.protobuf.Timestamp date_created = 4;
+    string created_by = 5;
+    google.protobuf.Timestamp last_updated = 6;
+    string updated_by = 7; 
+    google.protobuf.Timestamp date_closed = 8;
+    string closed_by = 9;  
+}
+
+message AccountIdRequest {
+    string id = 1; 
+}
+
+message FindAccountByCustomerRequest { 
+    string customer_id = 1; 
+}
+
+message AccountRequest { 
+    string id = 1; 
+    Account account = 2; 
+}
+
+
+message Accounts { 
+    repeated Account account =1; 
+}
+
+service AccountService { 
+    rpc createAccount(AccountRequest) returns (Account);
+    rpc updateAccount(AccountRequest) returns (Account);
+    rpc deleteAccount(AccountIdRequest) returns (Account); 
+    rpc getAccountById(AccountIdRequest) returns (Account); 
+    rpc findAccountByCustomer(FindAccountByCustomerRequest) returns (Accounts);  
+    rpc findOpenAccountsByCustomer(FindAccountByCustomerRequest) returns (Accounts);   
+}
+
